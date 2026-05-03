@@ -3,5 +3,7 @@
 
 dist/
 build/
+run/
 
 .DS_Store
+.env
