@@ -1,4 +1,4 @@
-# agentstage - backend
+# madchatter - backend
 
 ## Running the project
 Make sure to have python and uv installed.
