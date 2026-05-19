@@ -13,7 +13,7 @@ LogLevel = Literal["TRACE", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]
 
 class Settings(BaseSettings):
     """Application configuration loaded from the environment."""
-    model_config = SettingsConfigDict(env_prefix="AS_", env_file=".env")
+    model_config = SettingsConfigDict(env_prefix="MC_", env_file=".env")
 
     env: Env = Env.DEV
     """Application runtime environment."""
