@@ -5,7 +5,7 @@ from sqlalchemy import Engine
 from sqlalchemy.orm import sessionmaker
 
 from settings import Settings, Env
-from api.routes import example_router
+from api.routes import video_router
 
 API_PREFIX = "/api"
 
@@ -16,7 +16,7 @@ app.state.engine = None
 
 router = APIRouter(prefix=API_PREFIX)
 
-router.include_router(example_router)
+router.include_router(video_router)
 # router.include_router(example_router)
 # router.include_router(example_router)
 # add more routers here...
