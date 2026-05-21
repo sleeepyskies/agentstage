@@ -20,11 +20,3 @@ To solve this, we have decided to use the Frontend framework [React](https://rea
 - TypeScript support.
 - We all have either experience with React, or with similar frameworks.
 
-## Consequences
-
-_Omitted_
-
-## Governance
-
-_Omitted_
-

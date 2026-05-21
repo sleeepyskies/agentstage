@@ -1,1 +1,1 @@
-from .example import router as example_router
+from .videos import router as video_router

@@ -27,7 +27,3 @@ Pros:
 Cons:
 - Python is not the fastest language, and may be inferior in terms of speed when compared to other languages.
 - No static typing.
-
-## Governance
-
-_Omitted_
