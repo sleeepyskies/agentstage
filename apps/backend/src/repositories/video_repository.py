@@ -10,6 +10,7 @@ from db.models.videos import Video
 class UpdateVideo:
     """Dataclass props used for updating a video."""
     description: str | None
+    label: str | None
 
 
 class VideoRepository:
@@ -35,10 +36,13 @@ class VideoRepository:
     def update(self, video_id: int, new: UpdateVideo) -> Video | None:
         video = self.get(video_id)
 
-        if not video or new.description is None:
+        if not video:
             return None
 
-        video.description = new.description
+        if new.description is not None:
+            video.description = new.description
+        if new.label is not None:
+            video.label = new.label
 
         self.database.commit()
         self.database.refresh(video)

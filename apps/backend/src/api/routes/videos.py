@@ -1,22 +1,27 @@
-from fastapi import APIRouter, status, HTTPException
-from fastapi.params import Depends
-from sqlalchemy.orm import Session
-from starlette.datastructures import UploadFile
+from fastapi import APIRouter, HTTPException, File
+from fastapi import UploadFile
+from fastapi.params import Depends, Form
 
-from api.dependencies import database, get_video_service
-from schemas.videos import SimpleVideoResponse, CreateVideoRequest, UpdateVideoRequest
+from api.dependencies import get_video_service
+from models.videos import SimpleVideoResponse, UpdateVideoRequest, CreateVideoRequest
 from services.video_service import VideoService
 
-router = APIRouter(prefix="/videos", tags=["videos"])
+VIDEO_PREFIX = "/videos"
+
+router = APIRouter(prefix=VIDEO_PREFIX, tags=["videos"])
 
 
 @router.post("/upload", response_model=SimpleVideoResponse)
 def upload_video(
-        request: CreateVideoRequest,
-        file: UploadFile,
+        label: str = Form(...),
+        description: str = Form(...),
+        file: UploadFile = File(...),
         video_service: VideoService = Depends(get_video_service)
 ):
-    return video_service.upload_video(request, file)
+    return video_service.upload_video(
+        CreateVideoRequest(label=label, description=description),
+        file
+    )
 
 
 @router.get("", response_model=list[SimpleVideoResponse])
@@ -24,25 +29,28 @@ def list_videos(video_service: VideoService = Depends(get_video_service)):
     return video_service.list_videos()
 
 
-@router.get("{video_id}", response_model=SimpleVideoResponse)
-def get_video(video_id: int, db: Session = Depends(database)):
-    video = VideoService.get_video(db, video_id)
+@router.get("/{video_id}", response_model=SimpleVideoResponse)
+def get_video(video_id: int, video_service: VideoService = Depends(get_video_service)):
+    video = video_service.get_video(video_id)
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
     return video
 
 
 @router.patch("/{video_id}", response_model=SimpleVideoResponse | None)
-def update_video(video_id: int, request: UpdateVideoRequest, db: Session = Depends(database)):
-    video = VideoService.update_video(db, video_id, request)
+def update_video(
+        video_id: int,
+        request: UpdateVideoRequest,
+        video_service: VideoService = Depends(get_video_service)
+):
+    video = video_service.update_video(video_id, request)
     if not video:
         raise HTTPException(status_code=404, detail="Video not found")
     return video
 
 
-@router.patch("/{video_id}")
-def delete_video(video_id: int, db: Session = Depends(database)):
-    video_id = VideoService.delete_video(db, video_id)
-    if not video_id:
+@router.delete("/{video_id}")
+def delete_video(video_id: int, video_service: VideoService = Depends(get_video_service)):
+    deleted = video_service.delete_video(video_id)
+    if not deleted:
         raise HTTPException(status_code=404, detail="Video not found")
-    return video_id

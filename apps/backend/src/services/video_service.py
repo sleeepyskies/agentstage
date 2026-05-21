@@ -6,7 +6,7 @@ from fastapi import UploadFile
 
 from db.models.videos import Video
 from repositories.video_repository import VideoRepository, UpdateVideo
-from schemas.videos import SimpleVideoResponse, CreateVideoRequest, UpdateVideoRequest
+from models.videos import SimpleVideoResponse, UpdateVideoRequest, CreateVideoRequest
 
 
 class VideoService:
@@ -16,11 +16,16 @@ class VideoService:
     def __init__(self, repository: VideoRepository):
         self.repository = repository
 
-    def upload_video(self, request: CreateVideoRequest, file: UploadFile) -> SimpleVideoResponse:
+    def upload_video(
+            self,
+            request: CreateVideoRequest,
+            file: UploadFile
+    ) -> SimpleVideoResponse:
         filename = self._save_file(file)
 
         video = Video(
             description=request.description,
+            label=request.label,
             filename=filename,
         )
 
@@ -37,9 +42,12 @@ class VideoService:
             return None
         return SimpleVideoResponse.model_validate(video)
 
-    def update_video(self, video_id: int,
-                     request: UpdateVideoRequest) -> SimpleVideoResponse | None:
-        video = self.repository.update(video_id, UpdateVideo(description=request.description))
+    def update_video(
+            self,
+            video_id: int,
+            request: UpdateVideoRequest
+    ) -> SimpleVideoResponse | None:
+        video = self.repository.update(video_id, UpdateVideo(description=request.description, label=request.label))
 
         if not video:
             return None

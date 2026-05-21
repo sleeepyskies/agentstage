@@ -11,5 +11,10 @@ class Video(Base):
     __tablename__ = "videos"
 
     id = Column(Integer, primary_key=True)
+    """Primary key for Video Model."""
     description = Column(String(4096), nullable=False)
-    filename=Column(String(36), nullable=False) # we store filename as random UUID string
+    """User defined description of the video."""
+    label=Column(String(512), nullable=False)
+    """User defined name of the video."""
+    filename=Column(String(36), nullable=False)
+    """Backend UUID of the video."""
