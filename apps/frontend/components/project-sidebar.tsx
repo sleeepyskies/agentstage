@@ -4,7 +4,7 @@ import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
-import { TeamSwitcher } from "@/components/team-switcher";
+import { useRouter } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -15,9 +15,10 @@ import {
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   LayoutBottomIcon,
-  BookOpen02Icon,
-  Settings05Icon,
-  CropIcon,
+  Mic01Icon,
+  UserStarIcon,
+  Video01Icon,
+  ArrowLeft01Icon,
 } from "@hugeicons/core-free-icons";
 
 // This is sample data.
@@ -25,7 +26,7 @@ const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/",
+    avatar: "",
   },
   teams: [
     {
@@ -36,33 +37,35 @@ const data = {
   ],
   navMain: [
     {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: <HugeiconsIcon icon={LayoutBottomIcon} strokeWidth={2} />,
+      title: "Videos",
+      url: "/new-project/videos",
+      icon: <HugeiconsIcon icon={Video01Icon} strokeWidth={2} />,
     },
     {
-      title: "Projects",
-      url: "/projects",
-      icon: <HugeiconsIcon icon={CropIcon} strokeWidth={2} />,
+      title: "Speech",
+      url: "/new-project/speech",
+      icon: <HugeiconsIcon icon={Mic01Icon} strokeWidth={2} />,
     },
     {
-      title: "Settings",
-      url: "/settings",
-      icon: <HugeiconsIcon icon={Settings05Icon} strokeWidth={2} />,
-    },
-    {
-      title: "Tutorial",
-      url: "/tutorial",
-      icon: <HugeiconsIcon icon={BookOpen02Icon} strokeWidth={2} />,
+      title: "Personality",
+      url: "/new-project/personality",
+      icon: <HugeiconsIcon icon={UserStarIcon} strokeWidth={2} />,
     },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const router = useRouter();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <button
+          onClick={() => router.push("/dashboard")}
+          className="flex items-center gap-2 px-2 py-2 text-sm font-medium text-muted-foreground hover:text-black transition cursor-pointer"
+        >
+          <HugeiconsIcon icon={ArrowLeft01Icon} size={18} />
+          Back to Dashboard
+        </button>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

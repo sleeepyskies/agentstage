@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function NavMain({
   items,
@@ -17,26 +19,25 @@ export function NavMain({
     icon?: React.ReactNode;
   }[];
 }) {
-  const [activeTab, setActiveTab] = useState(items[0].title);
+  const pathname = usePathname();
 
   return (
     <SidebarGroup>
       <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton
-              asChild
-              isActive={activeTab === item.title}
-              onClick={() => setActiveTab(item.title)}
-              className="transition-colors hover:bg-sidebar-accent/40 data-[active=true]:bg-sidebar-accent/90 data-[active=true]:font-medium"
-            >
-              <a href={item.url}>
-                {item.icon}
-                <span>{item.title}</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
+        {items.map((item) => {
+          const isActive = pathname === item.url;
+
+          return (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild isActive={isActive}>
+                <Link href={item.url}>
+                  {item.icon}
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          );
+        })}
       </SidebarMenu>
     </SidebarGroup>
   );
