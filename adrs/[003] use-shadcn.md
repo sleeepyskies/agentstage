@@ -16,11 +16,3 @@ number of bugs encountered. Thus, it seems logical to use a component library.
 ## Decided Approach
 
 As a choice of component library, we have decided to use [shadcn](https://ui.shadcn.com/).
-
-## Consequences
-
-_Omitted_
-
-## Governance
-
-_Omitted_
